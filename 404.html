@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex">
+  <title>Redirecting… — GKStreams</title>
+  <script>
+    (function () {
+      var parts = location.pathname.split('/');
+      var base = parts.slice(0, 2).join('/') + '/';
+      location.replace(base + location.hash);
+    })();
+  </script>
+  <meta http-equiv="refresh" content="0;url=./">
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: #0a0a0f;
+      color: #ededf0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      text-align: center;
+    }
+    a { color: #e63946; font-weight: 600; }
+    a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <p>Page not found. <a href="./">Go to homepage</a></p>
+</body>
+</html>
