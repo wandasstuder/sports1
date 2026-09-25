@@ -1832,3 +1832,27 @@ img {
     display: none;
   }
 }
+
+
+/* AD BANNER */
+.ad-banner {
+  max-width: 1000px;
+  margin: 16px auto 0;
+  padding: 0 16px;
+  display: flex;
+  justify-content: center;
+}
+
+.ad-banner a {
+  display: block;
+  width: 100%;
+  max-width: 700px;
+}
+
+.ad-banner img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
