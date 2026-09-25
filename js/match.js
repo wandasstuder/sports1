@@ -38,6 +38,14 @@ const Match = {
     loadingPlayer.appendChild(Utils.el('div', { className: 'loading-spinner' }));
     playerContainer.appendChild(loadingPlayer);
     playerWrapper.appendChild(playerContainer);
+
+    const adBanner = Utils.el('div', { className: 'ad-banner' });
+    adBanner.innerHTML =
+      '<a href="https://amzn.to/4hm3Obt" target="_blank" rel="sponsored noopener nofollow">' +
+      '<img src="img/ads/tv-banner.webp" alt="Best TV deals on Amazon" width="700" height="180" loading="lazy">' +
+      '</a>';
+    container.appendChild(adBanner);
+
     container.appendChild(playerWrapper);
 
     this.playerContainer = playerContainer;
