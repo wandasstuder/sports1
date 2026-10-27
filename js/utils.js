@@ -124,6 +124,7 @@ const Utils = {
     if (!match || Utils.is24x7Channel(match) || !match.date) return false;
     const now = Date.now();
     if (now < match.date) return false;
+    if (match.ends_at) return now < Number(match.ends_at);
     const windowMs = Utils.LIVE_WINDOW_MS[match.category] || Utils.LIVE_WINDOW_MS.default;
     return now - match.date <= windowMs;
   },

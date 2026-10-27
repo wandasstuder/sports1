@@ -82,24 +82,10 @@ const Match = {
    * Load match data and streams
    */
   async loadMatch(matchId) {
-    let match = null;
-
-    const results = await Promise.allSettled([
-      API.getTodayMatches(),
-      API.getAllMatches()
-    ]);
-
-    if (results[0].status === 'fulfilled') {
-      match = results[0].value.find(m => m.id === matchId);
-    }
-    if (!match && results[1].status === 'fulfilled') {
-      match = results[1].value.find(m => m.id === matchId);
-    }
+    const matches = await API.getAllMatches();
+    const match = matches.find(m => m.id === matchId);
 
     if (!match) {
-      if (results[0].status === 'rejected' && results[1].status === 'rejected') {
-        throw new Error('Could not load match data');
-      }
       throw new Error('Match not found');
     }
 
@@ -136,7 +122,14 @@ const Match = {
     });
 
     const results = await Promise.all(streamPromises);
-    this.streams = results.flat();
+    const seen = new Set();
+    this.streams = results.flat().filter(stream => {
+      if (!stream || !stream.embedUrl) return false;
+      const key = stream.identityKey || stream.embedUrl;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
 
     if (this.streams.length === 0) {
       this.streamTabsEl.appendChild(
@@ -166,13 +159,14 @@ const Match = {
 
       const langSpan = Utils.el('span', {
         className: 'stream-tab-lang',
-        textContent: stream.language || 'Unknown'
+        textContent: stream.displayLabel || stream.sourceName || stream.language || 'Unknown'
       });
       tab.appendChild(langSpan);
 
+      const isHD = stream.hd || /HD/i.test(stream.quality || '');
       const qualitySpan = Utils.el('span', {
-        className: `stream-tab-quality ${stream.hd ? 'hd' : 'sd'}`,
-        textContent: stream.hd ? 'HD' : 'SD'
+        className: `stream-tab-quality ${isHD ? 'hd' : 'sd'}`,
+        textContent: stream.quality || (stream.hd ? 'HD' : 'SD')
       });
       tab.appendChild(qualitySpan);
 
@@ -228,6 +222,7 @@ const Match = {
     iframe.src = stream.embedUrl;
     iframe.setAttribute('allowfullscreen', 'true');
     iframe.setAttribute('allow', 'autoplay; fullscreen; picture-in-picture');
+    iframe.setAttribute('referrerpolicy', stream.referrerPolicy || 'no-referrer-when-downgrade');
     iframe.setAttribute('frameborder', '0');
     iframe.setAttribute('loading', 'lazy');
     this.playerContainer.appendChild(iframe);
@@ -247,8 +242,9 @@ const Match = {
       { label: 'Category', value: Leagues.formatCategoryName(match.category) },
     ];
 
-    if (league) {
-      fields.push({ label: 'League', value: league.name });
+    const leagueName = league ? league.name : (match.league_name || null);
+    if (leagueName) {
+      fields.push({ label: 'League', value: leagueName });
     }
 
     if (match.date) {

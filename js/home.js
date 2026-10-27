@@ -9,10 +9,10 @@ const Home = {
 
   preload() {
     if (this._preloadPromise) return this._preloadPromise;
-    this._preloadPromise = Promise.all([
-      API.getTodayMatches(),
-      API.getPopularMatches(),
-      API.getLiveMatches()
+    this._preloadPromise = API.getAllMatches().then(all => [
+      all,
+      all.filter(m => m.popular),
+      all.filter(m => API.isLiveMatch(m))
     ]).catch(err => {
       this._preloadPromise = null;
       throw err;
@@ -46,9 +46,9 @@ const Home = {
     sectionsContainer.appendChild(loadingEl);
 
     try {
-      const [todayMatches, popularMatches, liveMatches] = await this.preload();
+      const [allMatchesRaw, popularMatches, liveMatches] = await this.preload();
 
-      const allMatches = this.mergeMatches(todayMatches, this.mergeMatches(popularMatches, liveMatches));
+      const allMatches = this.mergeMatches(allMatchesRaw, this.mergeMatches(popularMatches, liveMatches));
       const allPopular = popularMatches.filter(m => m.popular && !Utils.is24x7Channel(m));
 
       const live = [...liveMatches];
@@ -120,7 +120,7 @@ const Home = {
     if (this._refreshing || !this._live) return;
     this._refreshing = true;
     try {
-      const liveMatches = await API.getLiveMatches({ fresh: true });
+      const liveMatches = await API.getLiveMatches();
       this._live = [...liveMatches];
       const liveIds = new Set(this._live.map(m => m.id));
       for (const [id, m] of this._promotedLive.entries()) {

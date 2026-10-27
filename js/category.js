@@ -71,10 +71,8 @@ const Category = {
     container.appendChild(contentDiv);
 
     try {
-      const [allMatches, popularMatches] = await Promise.all([
-        API.getMatchesBySport(sport),
-        API.getPopularBySport(sport)
-      ]);
+      const allMatches = await API.getMatchesBySport(sport);
+      const popularMatches = allMatches.filter(m => m.popular);
 
       const merged = this.mergeMatches(allMatches, popularMatches);
 

@@ -1,6 +1,40 @@
 const Leagues = {
   data: null,
 
+  // Reedstreams league ids mapped to the local leagues.json ids
+  REED_LEAGUE_IDS: {
+    nfl: 'nfl',
+    'ncaa-football': 'ncaaf',
+    nba: 'nba',
+    wnba: 'wnba',
+    'ncaa-basketball': 'ncaab',
+    mlb: 'mlb',
+    nhl: 'nhl',
+    ufc: 'ufc',
+    boxing: 'boxing',
+    'premier-league': 'epl',
+    'champions-league': 'ucl',
+    ucl: 'ucl',
+    mls: 'mls',
+    laliga: 'laliga',
+    'la-liga': 'laliga',
+    bundesliga: 'bundesliga',
+    'serie-a': 'seriea',
+    'ligue-1': 'ligue1',
+    nwsl: 'nwsl',
+    f1: 'f1',
+    'formula-1': 'f1',
+    nascar: 'nascar',
+    motogp: 'motogp',
+    cricket: 'cricket',
+    tennis: 'tennis',
+    golf: 'golf',
+    rugby: 'rugby',
+    afl: 'afl',
+    darts: 'darts',
+    billiards: 'billiards'
+  },
+
   /**
    * Load leagues data from JSON file
    */
@@ -56,6 +90,15 @@ const Leagues = {
     if (!this.data || !this.data.leagues) return null;
 
     const leagues = this.data.leagues;
+
+    // Pass 0: Reedstreams league id mapping (most reliable)
+    const reedId = (match.league_id || '').toLowerCase();
+    const mappedId = this.REED_LEAGUE_IDS[reedId];
+    if (mappedId) {
+      const mapped = leagues.find(l => l.id === mappedId);
+      if (mapped && mapped.category === match.category) return mapped;
+    }
+
     const title = (match.title || '').toLowerCase();
     const homeName = match.teams?.home?.name || '';
     const awayName = match.teams?.away?.name || '';
@@ -150,12 +193,21 @@ const Leagues = {
 
     for (const match of matches) {
       const league = this.detectLeague(match);
-      const leagueId = league ? league.id : `other_${match.category}`;
-      const leagueName = league ? league.name : this.formatCategoryName(match.category);
+      const leagueId = league
+        ? league.id
+        : (match.league_id ? `reed_${match.league_id}` : `other_${match.category}`);
+      const leagueName = league
+        ? league.name
+        : (match.league_name || this.formatCategoryName(match.category));
 
       if (!groups[leagueId]) {
         groups[leagueId] = {
-          league: league || { id: leagueId, name: leagueName, category: match.category },
+          league: league || {
+            id: leagueId,
+            name: leagueName,
+            category: match.category,
+            priority: 90
+          },
           matches: []
         };
         order.push(leagueId);
