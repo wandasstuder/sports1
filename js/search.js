@@ -158,7 +158,7 @@ const Search = {
         id: cat.id,
         label: cat.name,
         kind: 'Sport',
-        href: `#/category/${cat.id}`,
+        href: SiteConfig.mainHash(`/category/${cat.id}`),
         text: name,
         words: [name],
         boost: 0
@@ -175,7 +175,7 @@ const Search = {
         id: lg.id,
         label: lg.name,
         kind: 'League',
-        href: `#/league/${lg.id}`,
+        href: SiteConfig.mainHash(`/league/${lg.id}`),
         image: lg.image || null,
         iconId: lg.id,
         text: this.normalize([lg.name, lg.category || '', (lg.keywords || []).join(' ')].join(' ')),
@@ -217,7 +217,7 @@ const Search = {
           id: m.id,
           label,
           kind: league ? league.name : (m.category ? Leagues.formatCategoryName(m.category) : 'Match'),
-          href: `#/match/${encodeURIComponent(m.id)}`,
+          href: SiteConfig.matchUrl(m.id),
           iconId: league ? league.id : null,
           date: m.date,
           is247,
@@ -455,7 +455,12 @@ const Search = {
 
   select(entry) {
     this.clearInput();
-    if (entry.href) window.location.hash = entry.href;
+    if (!entry.href) return;
+    if (entry.href.charAt(0) === '#') {
+      window.location.hash = entry.href;
+    } else {
+      window.location.assign(entry.href);
+    }
   },
 
   setActive(index) {

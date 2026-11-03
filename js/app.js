@@ -268,9 +268,10 @@ const App = {
       this.currentPage = `category-${sport}`;
       Category.render(app, sport, null);
     } else if (hash.startsWith('#/match/')) {
+      // The watch page lives in the standalone stream repository.
       const matchId = decodeURIComponent(hash.replace('#/match/', ''));
-      this.currentPage = `match-${matchId}`;
-      Match.render(app, matchId);
+      window.location.replace(SiteConfig.matchUrl(matchId));
+      return;
     } else {
       this.currentPage = 'home';
       Home.render(app);

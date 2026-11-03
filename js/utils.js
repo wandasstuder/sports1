@@ -311,7 +311,7 @@ const Utils = {
 
     const row = Utils.el('div', {
       className: `match-row${isLive ? ' live' : ''}${is247 ? ' live-247' : ''}`,
-      onclick: () => { window.location.hash = `#/match/${match.id}`; }
+      onclick: () => { window.location.href = SiteConfig.matchUrl(match.id); }
     });
 
     const statusEl = Utils.el('div', {

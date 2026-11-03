@@ -343,7 +343,7 @@ const Home = {
 
     const card = Utils.el('div', {
       className: `big-game-card${isLive ? ' live' : ''}`,
-      onclick: () => { window.location.hash = `#/match/${match.id}`; }
+      onclick: () => { window.location.href = SiteConfig.matchUrl(match.id); }
     });
 
     const meta = Utils.el('div', { className: 'big-game-meta' });
