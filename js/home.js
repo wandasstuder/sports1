@@ -395,7 +395,7 @@ const Home = {
 
     const footer = Utils.el('div', { className: 'big-game-footer' });
     const watchBtn = Utils.el('button', { className: 'big-game-watch-btn' });
-    watchBtn.innerHTML = `<span class="play-icon">&#9654;</span> Go`;
+    watchBtn.innerHTML = `<span class="play-icon">&#9654;</span> Watch`;
     footer.appendChild(watchBtn);
     card.appendChild(footer);
 
