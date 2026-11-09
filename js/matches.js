@@ -129,7 +129,6 @@
         var link = document.createElement("a");
         link.className = "watch-btn";
         link.href = m.url;
-        link.target = "_blank";
         link.rel = "noopener noreferrer";
         link.textContent = "Watch";
         watchCell.appendChild(link);

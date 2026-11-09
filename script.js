@@ -127,10 +127,6 @@
         var a = document.createElement("a");
         a.className = "search-result";
         a.href = item.href;
-        if (item.external) {
-          a.target = "_blank";
-          a.rel = "noopener noreferrer";
-        }
         var label = document.createElement("span");
         label.textContent = item.label;
         a.appendChild(label);
@@ -168,8 +164,7 @@
         matchItems.push({
           label: title,
           kind: "Watch",
-          href: (SITE.watchBase || "") + "?id=" + encodeURIComponent(match.id),
-          external: true
+          href: (SITE.watchBase || "") + "?id=" + encodeURIComponent(match.id)
         });
       });
       showResults(pair, leagueItems.concat(matchItems).slice(0, 12));
