@@ -220,5 +220,27 @@ window.GK_SITE = {
       "name": "Android App",
       "path": "/app-download/"
     }
-  ]
+  ],
+  "legacyRoutes": {
+    "league/nfl": "/NFL/",
+    "league/nba": "/NBA/",
+    "league/mlb": "/MLB/",
+    "league/nhl": "/NHL/",
+    "league/ufc": "/UFC/",
+    "league/mls": "/Football/",
+    "league/epl": "/Premier/",
+    "league/ncaaf": "/NCAA/",
+    "league/ncaab": "/NCAA/",
+    "league/f1": "/Formula/",
+    "league/soccer": "/Football/",
+    "category/american-football": "/NFL/",
+    "category/basketball": "/Basketball/",
+    "category/football": "/Football/",
+    "category/baseball": "/Baseball/",
+    "category/hockey": "/Ice/",
+    "category/motor-sports": "/Motorsport/",
+    "category/fight": "/MMA/",
+    "category/tennis": "/Tennis/",
+    "category/golf": "/Golf/"
+  }
 };
