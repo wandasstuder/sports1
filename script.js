@@ -2,6 +2,20 @@
   "use strict";
   var SITE = window.GK_SITE || {};
 
+  var legacyHash = window.location.hash || "";
+  if (legacyHash.indexOf("#/") === 0) {
+    var legacyRoute = legacyHash.slice(2);
+    if (legacyRoute.indexOf("match/") === 0 && SITE.watchBase) {
+      window.location.replace(SITE.watchBase + "?id=" + encodeURIComponent(decodeURIComponent(legacyRoute.slice(6))));
+      return;
+    }
+    var legacyTarget = (SITE.legacyRoutes || {})[legacyRoute];
+    if (legacyTarget) {
+      window.location.replace(legacyTarget);
+      return;
+    }
+  }
+
   var hamburger = document.getElementById("hamburger");
   var mobileMenu = document.getElementById("mobileMenu");
 
